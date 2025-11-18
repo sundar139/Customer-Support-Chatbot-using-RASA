@@ -1,0 +1,122 @@
+version: "3.1"
+
+stories:
+  - story: greet and ask order status happy path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_order_status
+        entities:
+          - order_id: "12345"
+      - action: order_status_form
+      - active_loop: order_status_form
+      - slot_was_set:
+          - order_id: "12345"
+      - action: order_status_form
+      - active_loop: null
+      - action: action_check_order_status
+
+  - story: ask order status without providing ID
+    steps:
+      - intent: ask_order_status
+      - action: order_status_form
+      - active_loop: order_status_form
+      - slot_was_set:
+          - requested_slot: order_id
+      - intent: provide_order_id
+        entities:
+          - order_id: "67890"
+      - slot_was_set:
+          - order_id: "67890"
+      - action: order_status_form
+      - active_loop: null
+      - action: action_check_order_status
+
+  - story: ask return policy
+    steps:
+      - intent: ask_return_policy
+      - action: utter_return_policy
+
+  - story: initiate return with form
+    steps:
+      - intent: initiate_return
+      - action: return_form
+      - active_loop: return_form
+      - slot_was_set:
+          - requested_slot: order_id
+      - intent: provide_order_id
+        entities:
+          - order_id: "12345"
+      - slot_was_set:
+          - order_id: "12345"
+      - action: return_form
+      - slot_was_set:
+          - requested_slot: return_reason
+      - intent: provide_return_reason
+        entities:
+          - return_reason: "damaged"
+      - slot_was_set:
+          - return_reason: "damaged"
+      - action: return_form
+      - active_loop: null
+      - action: action_process_return
+
+  - story: ask shipping info
+    steps:
+      - intent: ask_shipping_info
+      - action: utter_shipping_info
+
+  - story: ask refund status
+    steps:
+      - intent: ask_refund_status
+      - action: utter_refund_status
+
+  - story: chitchat interruption during order tracking
+    steps:
+      - intent: ask_order_status
+      - action: order_status_form
+      - active_loop: order_status_form
+      - intent: chitchat
+      - action: utter_chitchat
+      - action: order_status_form
+      - active_loop: null
+      - action: action_check_order_status
+
+  - story: user thanks and goodbye
+    steps:
+      - intent: thank
+      - action: utter_thank
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - story: complete support conversation
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_order_status
+        entities:
+          - order_id: "12345"
+      - action: order_status_form
+      - active_loop: order_status_form
+      - slot_was_set:
+          - order_id: "12345"
+      - action: order_status_form
+      - active_loop: null
+      - action: action_check_order_status
+      - intent: thank
+      - action: utter_thank
+      - intent: goodbye
+      - action: utter_goodbye
+
+
+
+
+  - story: simple affirm path
+    steps:
+      - intent: affirm
+      - action: utter_thank
+
+  - story: simple deny path with default clarification
+    steps:
+      - intent: deny
+      - action: utter_default

@@ -1,0 +1,147 @@
+version: "3.1"
+
+# Intents - what users can say
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - thank
+  - ask_order_status
+  - ask_return_policy
+  - initiate_return
+  - ask_refund_status
+  - ask_shipping_info
+  - ask_payment_issue
+  - provide_order_id
+  - provide_return_reason
+  - chitchat
+  - out_of_scope
+
+# Entities - information to extract from user messages
+entities:
+  - order_id
+  - return_reason
+  - product_name
+  - issue_id
+
+# Slots - to store information during conversation
+slots:
+  order_id:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: order_id
+
+  return_reason:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: return_reason
+
+  product_name:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: product_name
+
+  requested_slot:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  issue_id:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: issue_id
+
+  problem_summary:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+# Responses - bot messages
+responses:
+  utter_greet:
+    - text: "Hello! I'm your customer support assistant. How can I help you today?"
+    - text: "Hi there! Welcome to customer support. What can I assist you with?"
+
+  utter_goodbye:
+    - text: "Thank you for contacting us. Have a great day!"
+    - text: "Goodbye! Feel free to reach out if you need anything else."
+
+  utter_thank:
+    - text: "You're welcome! Is there anything else I can help with?"
+    - text: "My pleasure! Let me know if you need further assistance."
+
+  utter_chitchat:
+    - text: "I'm a virtual assistant here to help with your customer support needs."
+    - text: "Yes, I'm a bot designed to assist you with orders, returns, and other inquiries."
+
+  utter_ask_order_id:
+    - text: "Could you please provide your order ID? It should be a 5-digit number."
+    - text: "Sure, I can help with that. What's your order ID?"
+
+  utter_ask_return_reason:
+    - text: "Could you please tell me the reason for the return?"
+    - text: "What's the reason you'd like to return this item?"
+
+  utter_return_policy:
+    - text: "Our return policy allows returns within 30 days of delivery for most items. The item must be unused and in original packaging. Refunds are processed within 5-7 business days after we receive the return."
+
+  utter_shipping_info:
+    - text: "Standard shipping takes 5-7 business days. Express shipping takes 2-3 business days. Free shipping is available on orders over $50."
+
+  utter_refund_status:
+    - text: "Refunds are typically processed within 5-7 business days after we receive your return. You'll receive an email confirmation once the refund is issued."
+
+  utter_payment_issue:
+    - text: "It looks like you're having trouble with payment. Please verify your card details and try again. If the issue persists, consider using a different payment method."
+    - text: "Payments can fail due to card verification or network issues. You can retry, use another card, or contact your bank."
+    - text: "For payment issues, please check that your payment method is valid and has sufficient funds. If the problem persists, contact your bank or try a different payment method."
+
+  utter_return_confirmation:
+    - text: "Your return request for order {order_id} has been processed. You'll receive a confirmation email with return instructions shortly."
+
+  utter_default:
+    - text: "I'm sorry, I didn't quite understand that. Could you rephrase your question?"
+    - text: "I'm not sure I understand. Can you try asking in a different way?"
+
+  utter_out_of_scope:
+    - text: "I'm specialized in helping with orders, returns, and shipping. For other inquiries, please visit our website or contact our general support line."
+
+  utter_issue_created:
+    - text: "I've created a support ticket {issue_id}. You can reference this ID for any follow-up. Would you like me to check your order status or help with something else?"
+
+# Forms - for multi-turn slot filling
+forms:
+  order_status_form:
+    required_slots:
+      - order_id
+
+  return_form:
+    required_slots:
+      - order_id
+      - return_reason
+
+# Actions - custom code to execute
+actions:
+  - action_check_order_status
+  - action_process_return
+  - action_default_fallback
+  - validate_order_status_form
+  - validate_return_form
+  - action_store_order_id
+  - action_create_ticket
+
+# Session configuration
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

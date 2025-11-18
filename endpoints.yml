@@ -1,0 +1,8 @@
+# Configuration for action server and trackers
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+# Tracker store configuration (optional - for conversation history)
+# tracker_store:
+#   type: sql
+#   dialect: "sqlite"
+#   db: "rasa.db"

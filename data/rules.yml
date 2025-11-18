@@ -1,0 +1,87 @@
+version: "3.1"
+
+rules:
+  - rule: Say goodbye anytime the user says goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - rule: Say thank you response
+    steps:
+      - intent: thank
+      - action: utter_thank
+
+  - rule: Answer return policy question
+    steps:
+      - intent: ask_return_policy
+      - action: utter_return_policy
+
+  - rule: Answer shipping info question
+    steps:
+      - intent: ask_shipping_info
+      - action: utter_shipping_info
+
+  - rule: Answer refund status question
+    steps:
+      - intent: ask_refund_status
+      - action: utter_refund_status
+
+  - rule: Answer payment issue question
+    steps:
+      - intent: ask_payment_issue
+      - action: utter_payment_issue
+
+  - rule: Answer chitchat
+    steps:
+      - intent: chitchat
+      - action: utter_chitchat
+
+  - rule: Handle out of scope
+    steps:
+      - intent: out_of_scope
+      - action: action_create_ticket
+
+  - rule: Activate order status form
+    steps:
+      - intent: ask_order_status
+      - action: order_status_form
+      - active_loop: order_status_form
+
+  - rule: Submit order status form
+    condition:
+      - active_loop: order_status_form
+    steps:
+      - action: order_status_form
+      - active_loop: null
+      - action: action_check_order_status
+
+  - rule: Activate return form
+    steps:
+      - intent: initiate_return
+      - action: return_form
+      - active_loop: return_form
+
+  - rule: Submit return form
+    condition:
+      - active_loop: return_form
+    steps:
+      - action: return_form
+      - active_loop: null
+      - action: action_process_return
+
+  - rule: Handle NLU fallback with default action
+    steps:
+      - intent: nlu_fallback
+      - action: action_default_fallback
+
+  - rule: Handle standalone provide_order_id
+    condition:
+      - active_loop: null
+    steps:
+      - intent: provide_order_id
+      - action: action_store_order_id
+
+  - rule: Create ticket when user reports issue
+    steps:
+      - intent: report_issue
+      - action: action_create_ticket

@@ -1,0 +1,7 @@
+rasa==3.6.20
+rasa-sdk==3.6.2
+tensorflow==2.12.0
+spacy==3.5.4
+python-dotenv==1.0.0
+pandas==2.0.3
+openpyxl==3.1.2

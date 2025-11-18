@@ -1,0 +1,200 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+      - good morning
+      - good evening
+      - hey there
+      - hi there
+      - greetings
+
+  - intent: goodbye
+    examples: |
+      - bye
+      - goodbye
+      - see you later
+      - see you
+      - talk to you later
+      - gotta go
+      - catch you later
+      - bye bye
+      - farewell
+
+  - intent: affirm
+    examples: |
+      - yes
+      - yeah
+      - yep
+      - sure
+      - absolutely
+      - correct
+      - that's right
+      - sounds good
+      - ok
+      - okay
+
+  - intent: deny
+    examples: |
+      - no
+      - nope
+      - never
+      - not really
+      - I don't think so
+      - no way
+      - not at all
+      - absolutely not
+
+  - intent: thank
+    examples: |
+      - thanks
+      - thank you
+      - thank you so much
+      - thanks a lot
+      - appreciate it
+      - thank you very much
+      - thx
+
+  - intent: ask_order_status
+    examples: |
+      - where is my order
+      - what's the status of my order
+      - track my order
+      - I want to track order [12345](order_id)
+      - can you check order [67890](order_id)
+      - where's my package
+      - order status for [11111](order_id)
+      - has my order shipped
+      - when will my order arrive
+      - check order [12345](order_id) status
+
+  - intent: provide_order_id
+    examples: |
+      - [12345](order_id)
+      - it's [67890](order_id)
+      - order [11111](order_id)
+      - my order id is [12345](order_id)
+      - order number [67890](order_id)
+      - the order is [11111](order_id)
+      - my order number is [ORD-1234-AB](order_id)
+      - order number is [AB12-3456](order_id)
+      - it's [ABCD-1234-XY](order_id)
+      - order id [ORD-9876-ZZ](order_id)
+
+  - intent: ask_return_policy
+    examples: |
+      - what is your return policy
+      - how do I return an item
+      - can I return something
+      - tell me about returns
+      - return policy
+      - how long do I have to return
+      - what's the return window
+
+  - intent: initiate_return
+    examples: |
+      - I want to return an item
+      - I need to return my order
+      - can I return order [12345](order_id)
+      - start a return
+      - return my product
+      - I'd like to make a return
+      - return request for [67890](order_id)
+
+  - intent: provide_return_reason
+    examples: |
+      - [it arrived damaged](return_reason)
+      - [wrong item](return_reason)
+      - [doesn't fit](return_reason)
+      - [changed my mind](return_reason)
+      - [defective product](return_reason)
+      - because [it's broken](return_reason)
+      - reason is [not as described](return_reason)
+
+  - intent: ask_refund_status
+    examples: |
+      - where is my refund
+      - refund status
+      - when will I get my refund
+      - has my refund been processed
+      - check refund for order [12345](order_id)
+      - I haven't received my refund
+
+  - intent: ask_shipping_info
+    examples: |
+      - how long does shipping take
+      - what are the shipping options
+      - shipping information
+      - delivery time
+      - how fast can you ship
+      - do you have express shipping
+      - is there free shipping
+
+  - intent: ask_payment_issue
+    examples: |
+      - my payment didn't go through
+      - payment failed
+      - card was declined
+      - having trouble with payment
+      - payment error
+      - can't complete checkout
+
+  - intent: report_issue
+    examples: |
+      - I need help with my order
+      - I have a problem with my delivery
+      - the package arrived damaged
+      - I need support, something went wrong
+      - please create a support ticket
+      - I want to report an issue
+      - help me troubleshoot my problem
+      - can you create a case for this
+      - I need assistance without an order id
+      - I have a question not related to my order
+
+  - regex: issue_id
+    examples: |
+      - ISSUE-[0-9]{6}
+      - CASE-[A-Z0-9]{6}
+
+  - intent: chitchat
+    examples: |
+      - are you a bot
+      - are you human
+      - who are you
+      - what are you
+      - are you real
+
+  - intent: out_of_scope
+    examples: |
+      - what's the weather
+      - tell me a joke
+      - who's the president
+      - how do I cook pasta
+      - play music
+      - what time is it
+
+  # Regex pattern(s) for extracting order_id
+  - regex: order_id
+    examples: |
+      - (?<=#)\d{5,10}
+      - \b\d{5,10}\b
+      - \b[0-9A-Z]{4,20}(?:-[0-9A-Z]{2,10})+\b
+      - \b(?:ORD|ORDER)[-_]?[A-Z0-9]{4,}\b
+
+  # Lookup table for common return reasons
+  - lookup: return_reason
+    examples: |
+      - damaged
+      - defective
+      - wrong size
+      - wrong item
+      - not as described
+      - late delivery
+      - changed mind
+      - quality issue
+      - missing parts

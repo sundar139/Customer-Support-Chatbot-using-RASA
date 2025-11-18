@@ -1,0 +1,489 @@
+version: '3.1'
+nlu:
+- intent: out_of_scope
+  examples: '- I can''t talk with  a human agent
+
+    - I have got to locate hte bills from {{Person Name}}
+
+    - I want help speaking to customer service
+
+    - where to sign up to the company nmewsletter
+
+    - I''d like to see the withdrwaal fee how can i do it
+
+    - I want to speak with someone
+
+    - can you help me getting bill #[85632](order_id)?
+
+    - I don''t know how to take a quick look at invoice #[12588](order_id)
+
+    - I don''t know how to delete my platinum account
+
+    - is it possible to locate my bill from {{Person Name}}
+
+    - i want help to file a consumer claim against ur organization
+
+    - uhave a free number to call customer support
+
+    - i do not know how i can see the early termination penalties
+
+    - could you help me to unsubscribe to the damn newsletter?
+
+    - I don''t know how to inform of problems with a signup
+
+    - download bill from {{Person Name}}
+
+    - I don''t know how to change to the pro account
+
+    - how can i see the status of my subscription to ur newsletter
+
+    - I don''t know what I have to do to cancel my {{Account Type}} account
+
+    - I want help cancelling my subscription to your newsletter
+
+    - I''m trying to see what hours i can call customer service
+
+    - need to check what hours i can call customer service
+
+    - I do not know how I can see the withdrawal fee
+
+    - I want to see the cancellation charges, how do I do it?
+
+    - I want help to chat with a live agent
+
+    - modifying info on platinum account
+
+    - I don''t know how I can download my bill #[12588](order_id)
+
+    - i want help talking with somebody
+
+    - I need assistanc canceling the newsletter subscription
+
+    - do uhave a toll-free customer assistance phone number
+
+    - is it possible to speak to someone ?
+
+    - I want help downloading invoice #[85632](order_id)
+
+    - can you hwlp me talking with a person?
+
+    - I want to open a {{Account Category}} account
+
+    - I do not know how to download the bills from {{Person Name}}
+
+    - editing data on {{Account Category}} acocunt
+
+    - talk to agent
+
+    - need help leaving an opinion for a product
+
+    - want help to see the withdrawal charges
+
+    - I don''t know what I have to do to close my {{Account Category}} account
+
+    - I''m trying to inform of a error with signup
+
+    - want help to speak with an person
+
+    - I need to see the cancellation fee, can you help me?
+
+    - have a problem with the removal of my {{Account Type}} account
+
+    - I awnt assistance to locate the bill #[00108](order_id)
+
+    - I have to create a platinum account, help me
+
+    - how to download my bills from {{Person Name}}?
+
+    - I don''t know what I have to do to download my invoice #[12588](order_id)
+
+    - I don''t know what I need to do to remove a standard account
+
+    - modifu details on {{Account Category}} account'
+- intent: ask_payment_issue
+  examples: '- I cannot pay, help me to inform of a problem with payments
+
+    - I try to see th accepted payment options
+
+    - where do i inform of a trouble with payments
+
+    - i dont know how to inform of a trouble with payment
+
+    - I want to see what payment options are availabl
+
+    - is it possible to list the available payment modalities ?
+
+    - helpchecking the allowed payment options
+
+    - where to report issues with online payments
+
+    - where could I inform of issues with payment?
+
+    - assistance to see ru accepted payment options
+
+    - I am trying to list your acceoted payment options
+
+    - check allowed payment methods
+
+    - is it possible to notify of troubles with online payment ?
+
+    - i want assistance to notify of errors with payment
+
+    - I can''t pay, assistance notifying of an issue with payment
+
+    - want assistance to see the payment modalities
+
+    - help me solving a trouble with payment
+
+    - can I list the available payment methods?
+
+    - I want help reporting payment problems
+
+    - errors with online payments
+
+    - i want assistance listing the payment methods
+
+    - i need assistance notifying of a payment probelm
+
+    - want help to report a trouble with payment
+
+    - need assistance to list ur fucking payment methods
+
+    - could you help me reporting errors with online payment?
+
+    - help to solve an error withonline payments
+
+    - i try to check what paymnt payment modalities ya accept
+
+    - I need assistance seeing what payment options are allowed
+
+    - I have got to report a trouble with online payment
+
+    - need assistance seeing the payment methods
+
+    - how can I inform of a trouble with payhments?
+
+    - I have to list your payment modalities, how do I do it?
+
+    - help me see your allowed payment options
+
+    - I want help to notify of an issue with payments
+
+    - i need assistance informing of problems with online payment
+
+    - I have to list the available payment options
+
+    - i have got to list the accepted payment methods how to do it
+
+    - my card was declined, inform of an error with payments
+
+    - I need to check your allowed payment options, how to do it?
+
+    - i want assistance to list the payment methods
+
+    - where can I list the payment options?
+
+    - i cannot pay want help to report errors with payments
+
+    - show me what payment options are accepted'
+- intent: ask_refund_status
+  examples: '- help me check in what cases can I ask to be refunded
+
+    - want assistance receiving a refund of money
+
+    - I expect a refund of {{Refund Amount}} dollars, has it been processed?
+
+    - assistance checking your reimbursement policy
+
+    - help me seeing in what cases can I request reimbursements
+
+    - I need to check in which situations can I ask for a refund
+
+    - wanna check uf refund policy
+
+    - I want help to get refunds
+
+    - i have paid {{Currency Symbol}}{{Refund Amount}} for an order I''m trying to
+    obtain a refund
+
+    - I expect a restitution of {{Refund Amount}} dollars
+
+    - I am waiting for a rebate fo {{Refund Amount}} dollars
+
+    - i expect a reimbursement of {{Refund Amount}} dollars
+
+    - see under what circumstances can i ask for reimbursements
+
+    - I want assistance requesting a compensation of money
+
+    - wanna ask for a compensatin of money
+
+    - i want help to ask for compensatiuons
+
+    - I''m waiting for a refund of {{Refund Amount}} dollrs
+
+    - can you show me the compensation status?
+
+    - I have got to track the restitution, how can I do it?
+
+    - i want help to check the current status of my compensation
+
+    - I don''t know how to check my restitution status
+
+    - help to see in which cases can I ask for refunds
+
+    - i expect a restitution of {{Currency Symbol}}{{Refund Amount}}
+
+    - I want help checking the restitution current status
+
+    - show me in which situations  can i ask for refunds
+
+    - i cannot see if there is anything new on my refund
+
+    - I am waiting for a rebate of {{Refund Amount}} dollars
+
+    - how to track the reimbursement?
+
+    - I need assistance checking your reimbursement policy
+
+    - help to check in what situations can I request a refund
+
+    - I need assistance tracking my reimbursement
+
+    - i dont kno how to request a refund of my money
+
+    - I do not know what I have to do to get refunds of my money
+
+    - how can i ask for refunds of money
+
+    - can you help me check the status of my compensation?
+
+    - I am waiting for a reimbursement of {{Refund Amount}} dollars
+
+    - is it possible to see in what cases can i ask for a refund
+
+    - assistance demanding restitutions of money
+
+    - I need assistance to receive a refund of my money
+
+    - I don''t know how I can see your refund policy
+
+    - I cannot see your refund policy
+
+    - I expect a restitution of {{Currency Symbol}}{{Refund Amount}}
+
+    - how can I see your reimbursement policy?
+
+    - I expect a compensation of {{Refund Amount}} dollars
+
+    - how can i demand refunds
+
+    - want help to obtain a compensation of money
+
+    - need to receive reimbursements of my money
+
+    - I want assistance to demand rebates of money
+
+    - i expect a refund of {{Currency Symbol}}{{Refund Amount}}
+
+    - can you help me see the current status of the rebate?'
+- intent: ask_shipping_info
+  examples: '- i want help to see when will my item arrive
+
+    - how do I submit another delivery address?
+
+    - there is a problem setting up my delivery address
+
+    - I want to see how soon can I expect the order, how to do it?
+
+    - issue submitting a secondary shipping address
+
+    - i have errors trying to modify the address
+
+    - help seeing what shipping options you offer
+
+    - I need information about a delivery address update
+
+    - is it possible to place an order from {{Delivery City}}
+
+    - tell me more about updating the delivery address
+
+    - I cannot submit a secondary delivery address
+
+    - set up new shipping address
+
+    - I do not know how I could enter my new delivery address
+
+    - there are issues setting up the new shipping address
+
+    - d uship to {{Delivery City}}
+
+    - need support tryinmg to change the address
+
+    - i need information about correcting my shipping address
+
+    - i dont know how to check what methods for delivery are there
+
+    - I have got to see what methods for delivery I have
+
+    - i dont know how to see the shipping options
+
+    - i need assstance to check how soon can i expect the order
+
+    - support updating my address
+
+    - i call to check when my parcel is gonna arive
+
+    - shipping to {{Delivery Country}}
+
+    - i try to check the shipment options
+
+    - need help editing m address
+
+    - can you show me what shipment options are available?
+
+    - how do I update the shipping address?
+
+    - can you help me to check the methods for shipping?
+
+    - I need to set up another deliverry address
+
+    - I call to check how long it takes for the purchase to arrive
+
+    - I need information about the methods for shipment
+
+    - i dont know how i can submit the secondary shipping address
+
+    - I am looking for information about a delivery address change
+
+    - where could I submit the shipping address?
+
+    - I have to check the shipping options, will you help me?
+
+    - problems setting up my secondary delivery address
+
+    - i want help trying to edit my delivery address
+
+    - can you show me when my item is going to arrive?
+
+    - I have troubles editing the address
+
+    - do you deliver to {{Delivery Country}}?
+
+    - tell me about modifying  my address
+
+    - want assistance to see the shipping options
+
+    - I have problems entering a different shipping address
+
+    - shipnents to {{Delivery Country}}
+
+    - I have got to check how soon can I expect my order, help me
+
+    - i have got to check when will my item arrive
+
+    - can you help me to check what shipment methods I have?
+
+    - i want assistance checking when will my item arrive
+
+    - I cannot enter the new delivery address'
+- intent: ask_order_status
+  examples: '- I can no longer afford order {{Order Number}}, can I cancel it?
+
+    - i cant edit order {{Order Number}}
+
+    - where could i check order {{Order Number}} fucking curent status
+
+    - want assistance seeing the ETA of purchase {{Order Number}}
+
+    - want assistanfe to shop several damn articles
+
+    - i have problems with canceling order {{Order Number}}
+
+    - I try to order some of your article
+
+    - can ya help me to switch an item oforder {{Order Number}}
+
+    - need assistance cancelling purchase {{Order Number}}
+
+    - changing order {{Order Number}}
+
+    - question about cancellung purchase {{Order Number}}
+
+    - I''d like to see order {{Order Number}} current status will  uhelp me
+
+    - I don''t know how I can cancel purchase {{Order Number}}
+
+    - I have problems with cancelling purchase {{Order Number}}
+
+    - how do I add some items to order {{Order Number}} ?
+
+    - changing purchase {{Order Number}}
+
+    - help me to delete an item from order {{Order Number}}
+
+    - need help to shop several of ur item
+
+    - I want to see the status of order {{Order Number}}
+
+    - what do I need to do to order something?
+
+    - i can no longer afford purchase {{Order Number}}
+
+    - I have to correct purchase {{Order Number}}, I need assistance
+
+    - I don''t know what I have to do to buy some of your article
+
+    - I need help acquiringv several of your item
+
+    - see current status of order {{Order Number}}
+
+    - I do not know how I can buy some of your article
+
+    - I want information about correcting order {{Order Number}}
+
+    - i dont want order {{Order Number}}
+
+    - what do I have to do to cancel purchase {{Order Number}}?
+
+    - I want to correct purchase {{Order Number}}
+
+    - what do I need to do to shop some of your product?
+
+    - how to check the current status of purchase {{Order Number}}?
+
+    - can unelp me shop a few of ur article
+
+    - what do I need to do to see order {{Order Number}} status?
+
+    - I do not know how to buy several of your product
+
+    - need help earning several of your article
+
+    - I need help with updating order {{Order Number}}
+
+    - i want assistance acquiring a few of ur article
+
+    - can you help me see the ETA of the order {{Order Number}}?
+
+    - I would like to cancel purchase {{Order Number}}
+
+    - need to acquire several of ur article
+
+    - can you help me track order {{Order Number}}?
+
+    - can you help me changing purchase {{Order Number}}?
+
+    - I can''t pay for purchase {{Order Number}}
+
+    - i want assistance to shop a product
+
+    - problems with swapping a product of purchase {{Order Number}}
+
+    - updating order {{Order Number}}
+
+    - need assistance to see the ETA of the purchase {{Order Number}}
+
+    - i do not know what i need to do to hsop several articles
+
+    - I don''t know how I can order some of your article'

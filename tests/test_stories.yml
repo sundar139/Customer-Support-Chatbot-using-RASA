@@ -1,0 +1,30 @@
+version: "3.1"
+
+stories:
+  - story: test order status with valid ID
+    steps:
+      - user: |
+          track order [12345](order_id)
+        intent: ask_order_status
+        entities:
+          - order_id: "12345"
+      - slot_was_set:
+          - order_id: "12345"
+      - action: action_check_order_status
+
+  - story: test return process
+    steps:
+      - user: |
+          I want to return order [12345](order_id)
+        intent: initiate_return
+        entities:
+          - order_id: "12345"
+      - action: return_form
+      - active_loop: return_form
+
+  - story: test greeting
+    steps:
+      - user: |
+          hello
+        intent: greet
+      - action: utter_greet
