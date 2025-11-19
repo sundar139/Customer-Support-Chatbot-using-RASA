@@ -29,7 +29,7 @@ pipeline:
 
   # Intent classifier and entity extractor
 - name: DIETClassifier
-  epochs: 100
+  epochs: 200
   constrain_similarities: true
   model_confidence: softmax
 
@@ -38,7 +38,7 @@ pipeline:
 
   # Response selector for FAQs
 - name: ResponseSelector
-  epochs: 100
+  epochs: 200
   constrain_similarities: true
   retrieval_intent: faq
 
@@ -51,8 +51,9 @@ pipeline:
 policies:
   # Rule-based policy for deterministic behavior
 - name: RulePolicy
-  core_fallback_threshold: 0.3
+  core_fallback_threshold: 0.15
   core_fallback_action_name: action_default_fallback
+  enable_fallback_prediction: true
 
   # Memorization policy
 - name: MemoizationPolicy
@@ -61,7 +62,7 @@ policies:
   # Transformer-based dialogue policy
 - name: TEDPolicy
   max_history: 5
-  epochs: 100
+  epochs: 200
   constrain_similarities: true
   model_confidence: softmax
 assistant_id: 20251117-165034-orange-muffin

@@ -2,12 +2,21 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, FollowupAction
 import json
 from pathlib import Path
 import os
 from dotenv import load_dotenv
 import uuid
+from datetime import datetime
+from typing import Optional
+
+# Excel logging
+try:
+    from openpyxl import Workbook, load_workbook
+except Exception:
+    Workbook = None
+    load_workbook = None
 
 load_dotenv()
 
@@ -43,6 +52,33 @@ class OrderDatabase:
 db = OrderDatabase()
 
 
+def append_ticket_log(issue_id: str, summary: str, order_id: Optional[str], sender_id: Optional[str]):
+    """Append a ticket entry to dataset/tickets.xlsx. Creates the workbook if missing."""
+    try:
+        if Workbook is None:
+            return
+        path = Path('./dataset/tickets.xlsx')
+        if path.exists():
+            wb = load_workbook(path)
+            ws = wb.active
+        else:
+            wb = Workbook()
+            ws = wb.active
+            ws.title = 'tickets'
+            ws.append(['timestamp', 'issue_id', 'order_id', 'sender_id', 'summary'])
+        ws.append([
+            datetime.utcnow().isoformat(timespec='seconds') + 'Z',
+            issue_id,
+            order_id or '',
+            sender_id or '',
+            summary,
+        ])
+        wb.save(path)
+    except Exception:
+        # Avoid crashing action on logging errors
+        pass
+
+
 class ActionCheckOrderStatus(Action):
     
     def name(self) -> Text:
@@ -62,26 +98,32 @@ class ActionCheckOrderStatus(Action):
         
         if order:
             status = order.get('status', 'unknown')
-            
+
+            # Show only essential details; avoid explicit status strings
             if status == 'in_transit':
                 expected_delivery = order.get('expected_delivery', 'soon')
                 tracking = order.get('tracking_number', 'N/A')
-                message = f"Your order {order_id} is currently in transit and expected to arrive by {expected_delivery}. Tracking number: {tracking}"
-            
+                message = f"Expected delivery by {expected_delivery}. Tracking number: {tracking}."
             elif status == 'delivered':
                 delivery_date = order.get('delivery_date', 'recently')
-                message = f"Your order {order_id} was delivered on {delivery_date}."
-            
+                message = f"Delivered on {delivery_date}."
             elif status == 'processing':
                 expected_delivery = order.get('expected_delivery', 'soon')
-                message = f"Your order {order_id} is currently being processed. Expected delivery: {expected_delivery}"
-            
+                message = f"Expected delivery: {expected_delivery}."
             else:
-                message = f"Your order {order_id} status: {status}"
-            
+                # Generic detail when status is unknown
+                expected_delivery = order.get('expected_delivery')
+                tracking = order.get('tracking_number')
+                parts = []
+                if expected_delivery:
+                    parts.append(f"Expected delivery: {expected_delivery}")
+                if tracking:
+                    parts.append(f"Tracking number: {tracking}")
+                message = ". ".join(parts) or "Order update available."
+
             items = order.get('items', [])
             if items:
-                message += f"\n\nItems: {', '.join(items)}"
+                message += f"\nItems: {', '.join(items)}"
         
         else:
             message = f"I'm sorry, I couldn't find any order with ID {order_id}. Please check the order ID and try again."
@@ -197,25 +239,39 @@ class ActionDefaultFallback(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        # Generate a support ticket for unclear/irrelevant queries
         latest_text = tracker.latest_message.get("text") or "Fallback triggered"
+        order_id = tracker.get_slot("order_id")
+        prior_issue = tracker.get_slot("issue_id")
+        fallback_count = tracker.get_slot("fallback_count") or 0
+
+        # If user said "yes" and we already have an order_id, route to status check
+        latest_intent = (tracker.latest_message.get("intent") or {}).get("name")
+        if latest_intent == "affirm" and order_id:
+            return [FollowupAction("action_check_order_status"), SlotSet("fallback_count", 0)]
+
+        # If we've already fallen back recently or a ticket exists, avoid spamming tickets
+        if prior_issue or (isinstance(fallback_count, (int, float)) and fallback_count >= 1):
+            dispatcher.utter_message(text=(
+                "I'm not sure I understand. Can you rephrase your question?"
+            ))
+            return [SlotSet("fallback_count", (fallback_count or 0) + 1)]
+
+        # Otherwise, generate a support ticket once
         rand = uuid.uuid4().hex[:6].upper()
         issue_id = f"ISSUE-{rand}"
+        summary = f"Ticket for order {order_id}: {latest_text}" if order_id else latest_text
 
-        order_id = tracker.get_slot("order_id")
-        if order_id:
-            summary = f"Ticket for order {order_id}: {latest_text}"
-        else:
-            summary = latest_text
+        # Log ticket to Excel and avoid exposing ticket id in chat
+        try:
+            append_ticket_log(issue_id, summary, order_id, tracker.sender_id)
+        except Exception:
+            pass
 
         dispatcher.utter_message(text=(
-            "I didn't quite catch that. I've opened a support ticket to help you out.\n"
-            f"Ticket: {issue_id}\n"
-            f"Summary: {summary}\n\n"
-            "If you share your order ID, I can also check its status."
+            "I've created a support ticket and captured your issue details. If you share your order ID, I can provide delivery information."
         ))
 
-        return [SlotSet("issue_id", issue_id), SlotSet("problem_summary", summary)]
+        return [SlotSet("issue_id", issue_id), SlotSet("problem_summary", summary), SlotSet("fallback_count", 1)]
 
 
 class ActionStoreOrderId(Action):
@@ -240,7 +296,8 @@ class ActionStoreOrderId(Action):
         
         if order_id:
             dispatcher.utter_message(text=f"Thanks! I have recorded your order ID: {order_id}. Would you like me to check its status?")
-            return [SlotSet("order_id", order_id)]
+            # Reset fallback counter once we have a clear path
+            return [SlotSet("order_id", order_id), SlotSet("fallback_count", 0)]
         else:
             dispatcher.utter_message(text="I couldn't detect an order ID. Please share it and I'll take it from there.")
             return []
@@ -269,12 +326,15 @@ class ActionCreateTicket(Action):
         else:
             summary = latest_text
 
-        # Acknowledge clearly
+        # Log ticket to Excel and keep chat concise (no ticket id shown)
+        try:
+            append_ticket_log(issue_id, summary, order_id, tracker.sender_id)
+        except Exception:
+            pass
+
         dispatcher.utter_message(text=(
-            f"Thanks, I've created a support ticket {issue_id}.\n"
-            f"Summary: {summary}\n\n"
-            "You can reference this ID for follow-up. If you have an order ID, share it and I can check its status."
+            "Thanks, I've created a support ticket and noted your issue. If you have an order ID, I can provide delivery details."
         ))
 
-        # Store issue_id and a brief summary
-        return [SlotSet("issue_id", issue_id), SlotSet("problem_summary", summary)]
+        # Store issue_id and a brief summary; also reset fallback counter
+        return [SlotSet("issue_id", issue_id), SlotSet("problem_summary", summary), SlotSet("fallback_count", 0)]

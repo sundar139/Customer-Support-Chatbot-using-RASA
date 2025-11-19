@@ -1,0 +1,18 @@
+{
+  "12345": {
+    "status": "in_transit",
+    "expected_delivery": "2025-11-20",
+    "tracking_number": "DHL-123456",
+    "items": ["Wireless Mouse", "USB-C Cable"]
+  },
+  "98765": {
+    "status": "delivered",
+    "delivery_date": "2025-11-15",
+    "items": ["Bluetooth Speaker"]
+  },
+  "54321": {
+    "status": "processing",
+    "expected_delivery": "2025-11-25",
+    "items": ["Laptop Stand"]
+  }
+}

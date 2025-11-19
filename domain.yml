@@ -67,6 +67,12 @@ slots:
     mappings:
       - type: custom
 
+  fallback_count:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: custom
+
 # Responses - bot messages
 responses:
   utter_greet:
@@ -144,4 +150,4 @@ actions:
 # Session configuration
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  carry_over_slots_to_new_session: false

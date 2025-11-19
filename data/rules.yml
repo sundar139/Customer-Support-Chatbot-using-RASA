@@ -74,6 +74,14 @@ rules:
       - intent: nlu_fallback
       - action: action_default_fallback
 
+  - rule: Affirm to check order status when ID is known
+    condition:
+      - slot_was_set:
+          - order_id: true
+    steps:
+      - intent: affirm
+      - action: action_check_order_status
+
   - rule: Handle standalone provide_order_id
     condition:
       - active_loop: null
